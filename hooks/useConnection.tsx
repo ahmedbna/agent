@@ -1,12 +1,16 @@
-import { TokenSource, TokenSourceBase, TokenSourceResponseObject } from 'livekit-client';
+import {
+  TokenSource,
+  TokenSourceBase,
+  TokenSourceResponseObject,
+} from 'livekit-client';
 import { createContext, useContext, useMemo, useState } from 'react';
 import { SessionProvider, useSession } from '@livekit/components-react';
 
-// TODO: Add your Sandbox ID here
-const sandboxID = '';
+// Add your Sandbox ID here
+const sandboxID = 'orca-bqjloo';
 
 // The name of the agent you wish to be dispatched.
-const agentName = undefined
+const agentName = undefined;
 
 // NOTE: If you prefer not to use LiveKit Sandboxes for testing, you can generate your
 // tokens manually by visiting https://cloud.livekit.io/projects/p_/settings/keys
@@ -45,20 +49,18 @@ export function ConnectionProvider({ children }: ConnectionProviderProps) {
 
   const tokenSource = useMemo(() => {
     if (sandboxID) {
-      return TokenSource.sandboxTokenServer(sandboxID)
+      return TokenSource.sandboxTokenServer(sandboxID);
     } else {
-      return TokenSource.literal(
-        {
-          serverUrl: hardcodedUrl,
-          participantToken: hardcodedToken,
-        } satisfies TokenSourceResponseObject
-      )
+      return TokenSource.literal({
+        serverUrl: hardcodedUrl,
+        participantToken: hardcodedToken,
+      } satisfies TokenSourceResponseObject);
     }
-  }, [sandboxID, hardcodedUrl, hardcodedToken])
+  }, [sandboxID, hardcodedUrl, hardcodedToken]);
 
   const session = useSession(
     tokenSource,
-    agentName ? { agentName } : undefined
+    agentName ? { agentName } : undefined,
   );
 
   const { start: startSession, end: endSession } = session;
@@ -79,7 +81,9 @@ export function ConnectionProvider({ children }: ConnectionProviderProps) {
 
   return (
     <SessionProvider session={session}>
-      <ConnectionContext.Provider value={value}>{children}</ConnectionContext.Provider>
+      <ConnectionContext.Provider value={value}>
+        {children}
+      </ConnectionContext.Provider>
     </SessionProvider>
   );
 }
